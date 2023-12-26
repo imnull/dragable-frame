@@ -1,0 +1,1 @@
+export type TComponentListItem = { name: string; text: string;  }

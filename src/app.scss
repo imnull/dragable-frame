@@ -1,0 +1,29 @@
+.dragable-frame {
+    border: 1px solid #000;
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    .left {
+        position: relative;
+        background-color: #aaa;
+    }
+    .right {
+        flex: 1;
+        position: relative;
+    }
+    .ctrls {
+        position: relative;
+        width: 320px;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(255, 255, 255, 0.5);
+    }
+}
+
+
