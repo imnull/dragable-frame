@@ -1,4 +1,5 @@
-import { InputNumber, Typography } from 'antd'
+import { Input, Typography } from 'antd'
+import { useState } from 'react'
 import { getWidgetByPath } from '~/libs/messager'
 import { changeWidgetProp, useAppDispatch, useAppSelector } from '~/store'
 import { TWidget } from '~/type'
@@ -8,13 +9,13 @@ export default (props: {
     ['prop-set-name']: string
     path?: number[]
     text?: string
-    min?: number
-    max?: number
+    value?: any
 }) => {
+
     const {
         ['prop-set-name']: _propName,
         path = [],
-        min = 0, max = 9, text = '',
+        text = '',
     } = props
 
     const dispatch = useAppDispatch()
@@ -22,20 +23,16 @@ export default (props: {
     const widgetPropValue = useAppSelector(state => {
         const w = getWidgetByPath(path, state.widgets.list) as TWidget
         if (!w) {
-            return 0
+            return ''
         }
-        return formatValue('number', (w.props || {})[_propName])
-    }) as number
-
-
+        return formatValue('string', (w.props || {})[_propName])
+    }) as string
 
     return <div className="controller int-input">
         <Typography.Title level={5}>{text}</Typography.Title>
-        <InputNumber
-            type="number"
-            min={min} max={max} value={widgetPropValue}
-            onChange={val => {
-                dispatch(changeWidgetProp({ path, prop: _propName, value: val }))
+        <Input type="text" value={widgetPropValue}
+            onChange={e => {
+                dispatch(changeWidgetProp({ path, prop: _propName, value: e.target.value }))
             }}
         />
     </div>

@@ -57,7 +57,7 @@ export const findWidgetPath = (widget: null | undefined | TFormattedWidget[] | T
     }
 }
 
-const updateWidgetByPath = (path: number[], widgets: TFormattedWidget[]) => {
+export const updateWidgetByPath = (path: number[], widgets: TFormattedWidget[]) => {
     const p = [...path]
     let ws = [...widgets]
     while (p.length > 0) {

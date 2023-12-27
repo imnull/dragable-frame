@@ -1,3 +1,5 @@
+import { TWidget, TFormattedWidget } from '~/type'
+
 const getWidgetByPath = (widgets: any[], path: number[]) => {
     if (path.length < 1) {
         return null
@@ -61,20 +63,7 @@ export const genId = () => {
     return arr.join('').slice(0, len)
 }
 
-export type TWidget = {
-    type: string
-    text: string
-    data?: any
-    props?: any
-    children?: TWidget[]
-}
 
-export type TFormattedWidget = {
-    __id__: string
-    __isWidget__: true
-} & TWidget & {
-    children?: TFormattedWidget[]
-}
 
 export const formatWidget = (widget: TWidget): TFormattedWidget => {
     if (widget && (widget as any).__isWidget__) {
@@ -101,4 +90,12 @@ export const repeat = <T = void>(callback: (index: number) => T, to: number, fro
         arr.push(callback(i))
     }
     return arr
+}
+
+export const formatValue = (type: 'number' | 'string' | 'boolean', val: string) => {
+    switch (type) {
+        case 'number': return Number(val)
+        case 'boolean': return Boolean(val)
+    }
+    return val
 }

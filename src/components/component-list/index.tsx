@@ -1,12 +1,10 @@
-import { TWidget } from '~/utils'
 import './index.scss'
+import { useAppSelector } from '~/store'
 
 
 
-export default (props: {
-    list: TWidget[]
-}) => {
-    const { list } = props
+export default () => {
+    const list = useAppSelector(state => state.components.list)
     return <div className="component-list">{
         list.map((item, index) => <div className="item" key={index} draggable onDragStart={e => e.dataTransfer.setData('text/plain', JSON.stringify(item))}>
             <div className="thumb"></div>

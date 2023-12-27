@@ -1,43 +1,29 @@
-import { TFormattedWidget } from '~/utils'
+import { useAppSelector } from '~/store'
 import MAPPER from './mapper'
-import { TOnMessage } from './type'
+import { TOnMessage, TFormattedWidget } from '~/type'
 
 export const Widget = (props: {
-    widget: TFormattedWidget
-    active?: TFormattedWidget
     path: number[],
-    onMessage?: TOnMessage
+    type: string,
 }) => {
-    const { path, widget, active, onMessage } = props
-    const { type, children } = widget
-    if (!type) {
-        return null
-    }
+    const { path, type } = props
     const { [type]: C } = MAPPER
     if (C) {
-        const widgets = children ? Array.isArray(children) ? children : [children] : []
-        return <C active={active} widget={widget} path={[...path]} widgets={widgets} onMessage={onMessage} />
+        return <C path={[...path]} />
     } else {
         return null
     }
 }
 
-const Render = (props: {
-    widgets: TFormattedWidget[]
-    active?: TFormattedWidget
-    path: number[]
-    onMessage?: TOnMessage
-}) => {
-    const { widgets, path = [], active, onMessage } = props
-    if (!widgets || widgets.length < 1) {
-        return null
-    }
+const Render = () => {
+    const widgets = useAppSelector(state => state.widgets.list)
     return <>{
         widgets.map((widget, index) => {
             if (!widget) {
                 return null
             }
-            return <Widget active={active} widget={widget} path={[...path, index]} key={widget.__id__} onMessage={onMessage} />
+            const { type } = widget
+            return <Widget type={type} path={[index]} key={widget.__id__} />
         })
     }</>
 }

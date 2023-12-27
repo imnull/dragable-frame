@@ -1,33 +1,42 @@
-import { TOnMessage } from '../type'
 import '../base.scss'
 
-import { TFormattedWidget } from '~/utils'
+import {
+    useAppDispatch,
+    useAppSelector,
+    setWidgetActive,
+    setActivePath,
+    removeWidgetByPath,
+} from '~/store'
+import { getWidgetByPath } from '~/libs/messager'
+import { TFormattedWidget } from '~/type'
 
 export default (props: {
-    widget?: TFormattedWidget
-    active?: TFormattedWidget
     path: number[]
     subName: string
     title: string
     children?: any
-    onMessage?: TOnMessage
 }) => {
-    const { widget, path, children = null, title, subName, active, onMessage } = props
+    const { path, children = null, title, subName } = props
+    const widget = useAppSelector(state => getWidgetByPath(path, state.widgets.list)) as TFormattedWidget
+    const active = useAppSelector(state => state.widgets.activeId)
+    const dispatch = useAppDispatch()
 
-    if(!widget) {
+    if (!widget) {
         return <h1>Widget is null</h1>
     }
 
-    return <div className={`widget ${active && active.__id__ === widget.__id__ ? 'active' : ''} ${subName}`}>
+    return <div className={`widget ${active === widget.__id__ ? 'active' : ''} ${subName}`}>
         <div className='head' onClick={e => {
             e.stopPropagation()
-            if(widget && typeof onMessage === 'function') {
-                onMessage('widget-active', path, widget)
-            }
+            dispatch(setWidgetActive(widget.__id__))
+            dispatch(setActivePath(path))
         }}>
             {/* <span>{title} | {widget?.__id__}</span> */}
             <span>{title}</span>
-            <label onClick={() => widget && typeof onMessage === 'function' && onMessage('remove', path)}>X</label>
+            <label onClick={e => {
+                e.stopPropagation()
+                dispatch(removeWidgetByPath({ path }))
+            }}>X</label>
         </div>
         {children}
     </div>

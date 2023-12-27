@@ -69,4 +69,11 @@
             }
         }
     }
+
+    &.input {
+        > .content {
+            flex-direction: column;
+            padding: 0 10px 10px 15px;
+        }
+    }
 }

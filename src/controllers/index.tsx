@@ -1,69 +1,62 @@
-import { TFormattedWidget } from '~/utils'
-import IntInput from './input-int'
+import { useAppSelector } from '~/store'
+import InputInt from './input-int'
+import InputText from './input-text'
 
-export type TControlProps = {
-    prop: string
-    text: string
-    type: 'string' | 'number' | 'boolean'
-    component: string
-} & Record<string, string | number>
-
-export type TController = {
-    type: string
-    ctrls: TControlProps[]
-}
+import { TControlProps, TWidget } from '~/type'
+import { useEffect, useState } from 'react'
+import { getWidgetByPath } from '~/libs/messager'
+import { formatValue } from '~/utils'
 
 const mapper = {
-    'int-input': IntInput,
+    'input-int': InputInt,
+    'input-text': InputText,
 } as Record<string, any>
 
-const formatValue = (type: 'number' | 'string' | 'boolean', val: string) => {
-    switch(type) {
-        case 'number': return Number(val)
-        case 'boolean': return Boolean(val)
-    }
-    return val
-}
 
 const Controller = (props: {
-    widgetId: string
-    widgetProps: Record<string, any> | null
-    propValue: any
-    property: TControlProps
-    onPropsChange: (id: string, prop: string, value: any) => void
+    path: number[]
+    prop: TControlProps
+    value: any
 }) => {
-    const { property, widgetId, widgetProps, propValue, onPropsChange } = props
-    if (!property || !widgetProps) {
-        return null
-    }
-    const { prop, type, component, ...p } = property
+    const { path, prop, value: propValue } = props
+
+    const { prop: propName, type: propType, component, ...p } = prop
     const { [component]: C } = mapper
     if (!C) {
         return null
     }
-    return <C { ...p } value={propValue} widgetId={widgetId} prop={prop} onPropsChange={(id: string, prop: string, val: any) => {
-        onPropsChange(id, prop, formatValue(type, val))
-    }} />
+    return <C {...p} path={path} prop-set-name={propName} />
 }
 
-export default (props: {
-    widgetId: string
-    widgetProps: Record<string, any> | null
-    ctrlProps: TControlProps[]
-    onPropsChange: (id: string, prop: string, value: any) => void
-}) => {
-    const { ctrlProps = [], widgetId, widgetProps, onPropsChange } = props
-    if(!widgetProps) {
+export default () => {
+    const hasActive = useAppSelector(state => state.widgets.activePath.length > 0)
+    const path = useAppSelector(state => state.widgets.activePath)
+    const widgets = useAppSelector(state => state.widgets.list)
+    const ctrls = useAppSelector(state => state.controllers.list)
+
+    const [ctrlProps, setCtrlProps] = useState<TControlProps[]>([])
+    const [widgetProps, setWidgetProps] = useState<any>(null)
+
+    useEffect(() => {
+        const widget = getWidgetByPath(path, widgets) as TWidget
+        if (!widget) {
+            return
+        }
+        const { type, props = null } = widget
+        const ctrl = ctrls.find(c => c.type === type)
+        if (!ctrl) {
+            setWidgetProps(null)
+            setCtrlProps([])
+            return
+        }
+        setCtrlProps(ctrl.ctrls)
+        setWidgetProps(props)
+    }, [path, widgets])
+
+    if (!hasActive || !widgetProps || ctrlProps.length < 1) {
         return null
     }
     return ctrlProps.map((prop, index) => {
-        return <Controller
-            onPropsChange={onPropsChange}
-            widgetId={widgetId}
-            widgetProps={widgetProps}
-            propValue={widgetProps[prop.prop]}
-            property={prop}
-            key={`${widgetId}-${prop.prop}-${index}`}
-        />
+        return <Controller path={path} prop={prop} value={widgetProps[prop.prop]} key={index} />
     })
 }

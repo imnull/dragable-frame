@@ -1,41 +1,43 @@
 import '~/widgets/base.scss'
 
 import { Widget } from '../index'
-import { TFormattedWidget } from '~/utils'
-import { TOnMessage } from '../type'
+import { TOnMessage, TFormattedWidget } from '~/type'
 import WidgetHead from '../widget-head'
 
-export default (props: {
-    widgets?: any[]
-    widget?: TFormattedWidget
-    path?: number[]
-    active?: string
-    onMessage?: TOnMessage
-}) => {
-    const { widgets = [], widget, path = [], active = '', onMessage } = props
-    const [left = null, right = null] = Array.isArray(widgets) ? widgets : []
+import {
+    useAppDispatch,
+    useAppSelector,
+    addIndexedWidgetByPath,
+} from '~/store'
+import { getWidgetByPath } from '~/libs/messager'
 
-    return <WidgetHead onMessage={onMessage} widget={widget} active={active} path={path} subName="col2" title="一行二列">
+export default (props: {
+    path: number[]
+}) => {
+    const { path = [] } = props
+
+    const dispatch = useAppDispatch()
+
+    const left = useAppSelector(state => getWidgetByPath([...path, 0], state.widgets.list))
+    const right = useAppSelector(state => getWidgetByPath([...path, 1], state.widgets.list))
+
+    return <WidgetHead path={path} subName="col2" title="一行二列">
         <div className='content'>
             <div className='col' onDragOver={e => e.preventDefault()} onDrop={e => {
                 e.stopPropagation()
-                if (typeof onMessage === 'function') {
-                    const text = e.dataTransfer.getData('text/plain')
-                    const data = JSON.parse(text)
-                    onMessage('col2-add', path, [0, data])
-                }
+                const text = e.dataTransfer.getData('text/plain')
+                const data = JSON.parse(text)
+                dispatch(addIndexedWidgetByPath({ path, data, index: 0 }))
             }}>
-                {left ? <Widget active={active} widget={left} path={[...path, 0]} onMessage={onMessage} /> : '拖入组件'}
+                {left ? <Widget type={left.type} path={[...path, 0]} /> : '拖入组件'}
             </div>
             <div className='col' onDragOver={e => e.preventDefault()} onDrop={e => {
                 e.stopPropagation()
-                if (typeof onMessage === 'function') {
-                    const text = e.dataTransfer.getData('text/plain')
-                    const data = JSON.parse(text)
-                    onMessage('col2-add', path, [1, data])
-                }
+                const text = e.dataTransfer.getData('text/plain')
+                const data = JSON.parse(text)
+                dispatch(addIndexedWidgetByPath({ path, data, index: 1 }))
             }}>
-                {right ? <Widget active={active} widget={right} path={[...path, 1]} onMessage={onMessage} /> : '拖入组件'}
+                {right ? <Widget type={right.type} path={[...path, 1]} /> : '拖入组件'}
             </div>
         </div>
     </WidgetHead>

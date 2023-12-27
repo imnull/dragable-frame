@@ -1,27 +1,23 @@
-import { TOnMessage } from '~/widgets/type'
+import { TOnMessage } from '~/type'
 import './index.scss'
 
 import WidgetRender from '~/widgets'
-import { useEffect, useState } from 'react'
-import { TFormattedWidget, genId } from '~/utils'
 
-export default (props: {
-    onDropWidget?: (data: any) => void
-    onMessage?: TOnMessage
-    active?: TFormattedWidget
-    widgets?: any[]
-}) => {
-    const { onDropWidget, onMessage, widgets = [], active } = props
-    const handleDrop = (e: any) => {
-        if (typeof onDropWidget === 'function') {
-            const textPlain = e.dataTransfer.getData('text/plain')
-            onDropWidget(JSON.parse(textPlain))
-        }
-    }
+import {
+    useAppDispatch,
+    addWidgetToList,
+} from '~/store'
 
-    return <div className="preview-mobile" onDragOver={e => e.preventDefault()} onDrop={handleDrop}>
+export default () => {
+
+    const dispatch = useAppDispatch()
+
+    return <div className="preview-mobile" onDragOver={e => e.preventDefault()} onDrop={e => {
+        const textPlain = e.dataTransfer.getData('text/plain')
+        dispatch(addWidgetToList(JSON.parse(textPlain)))
+    }}>
         <div className="screen">
-            <WidgetRender active={active} widgets={widgets} onMessage={onMessage} />
+            <WidgetRender />
         </div>
     </div>
 }
