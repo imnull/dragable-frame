@@ -63,10 +63,12 @@ export const genId = () => {
     return arr.join('').slice(0, len)
 }
 
-
+export const isFormattedWidget = (widget: any) => {
+    return widget && widget.__isWidget__ === true
+}
 
 export const formatWidget = (widget: TWidget): TFormattedWidget => {
-    if (widget && (widget as any).__isWidget__) {
+    if (isFormattedWidget(widget)) {
         return widget as TFormattedWidget
     }
 
@@ -78,6 +80,11 @@ export const formatWidget = (widget: TWidget): TFormattedWidget => {
         ...rest,
         children: Array.isArray(children) ? formatWidgets(children) : undefined,
     } as TFormattedWidget
+}
+
+export const restoreWidget = (widget: TFormattedWidget): TWidget => {
+    const { __id__, __isWidget__, ...rest } = widget
+    return rest
 }
 
 export const formatWidgets = (widget: any[]) => {

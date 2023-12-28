@@ -9,6 +9,7 @@ import {
 } from '~/store'
 import { getWidgetByPath } from '~/libs/messager'
 import { TFormattedWidget } from '~/type'
+import { restoreWidget } from '~/utils'
 
 export default (props: {
     path: number[]
@@ -30,12 +31,19 @@ export default (props: {
             {children}
         </div>
     } else {
-        return <div className={`widget ${active === widget.__id__ ? 'active' : ''} ${widget.type}`}>
-            <div className='head' onClick={e => {
-                e.stopPropagation()
-                dispatch(setWidgetActive(widget.__id__))
-                dispatch(setActivePath(path))
-            }}>
+        return <div
+            className={`widget ${active === widget.__id__ ? 'active' : ''} ${widget.type}`}
+            draggable
+            onDragStart={e => e.dataTransfer.setData('text/plain', JSON.stringify(widget))}
+        >
+            <div
+                className='head'
+                onClick={e => {
+                    e.stopPropagation()
+                    dispatch(setWidgetActive(widget.__id__))
+                    dispatch(setActivePath(path))
+                }}
+            >
                 {/* <span>{title} | {widget?.__id__}</span> */}
                 <span>{widget.text}</span>
                 <label onClick={e => {
