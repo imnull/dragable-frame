@@ -1,7 +1,6 @@
 import '~/widgets/base.scss'
 
 import { Widget } from '../index'
-import { TOnMessage, TFormattedWidget } from '~/type'
 import WidgetHead from '../widget-head'
 
 import {
@@ -21,7 +20,7 @@ export default (props: {
     const left = useAppSelector(state => getWidgetByPath([...path, 0], state.widgets.list))
     const right = useAppSelector(state => getWidgetByPath([...path, 1], state.widgets.list))
 
-    return <WidgetHead path={path} subName="col2" title="一行二列">
+    return <WidgetHead path={path}>
         <div className='content'>
             <div className='col' onDragOver={e => e.preventDefault()} onDrop={e => {
                 e.stopPropagation()

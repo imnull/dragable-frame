@@ -1,8 +1,9 @@
-import { Input, Typography } from 'antd'
+import { Typography, Radio } from 'antd'
 import WidgetHead from '../widget-head'
 import { useAppSelector } from '~/store'
 import { getWidgetByPath } from '~/libs/messager'
 import { TWidget } from '~/type'
+import { formatPlainDataToOptions } from '~/utils'
 
 
 export default (props: {
@@ -18,14 +19,16 @@ export default (props: {
     const {
         title = 'Title',
         value = '',
-        placeholder = '',
-        maxlength = 12,
+        options = []
     } = properties
 
     return <WidgetHead path={path}>
         <div className="content form-item">
             <Typography.Title level={5}>{title}</Typography.Title>
-            <Input placeholder={placeholder} value={value} maxLength={maxlength} />
+            <Radio.Group
+                value={value}
+                options={formatPlainDataToOptions(options || '')}
+            />
         </div>
     </WidgetHead>
 }

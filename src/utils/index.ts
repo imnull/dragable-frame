@@ -99,3 +99,10 @@ export const formatValue = (type: 'number' | 'string' | 'boolean', val: string) 
     }
     return val
 }
+
+export const formatPlainDataToOptions = (data: string) => {
+    return data.trim().split(/[\r\n]+/).map(line => {
+        const [label, value = label, disabled] = line.split(/\:{2,}/)
+        return { label, value, disabled: disabled === '1' || disabled === 'true' }
+    })
+}

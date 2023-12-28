@@ -1,6 +1,5 @@
 import { useAppSelector } from '~/store'
 import MAPPER from './mapper'
-import { TOnMessage, TFormattedWidget } from '~/type'
 
 export const Widget = (props: {
     path: number[],

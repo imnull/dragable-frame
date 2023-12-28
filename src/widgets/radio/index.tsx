@@ -1,4 +1,4 @@
-import { Input, Typography } from 'antd'
+import { Typography, Radio } from 'antd'
 import WidgetHead from '../widget-head'
 import { useAppSelector } from '~/store'
 import { getWidgetByPath } from '~/libs/messager'
@@ -16,16 +16,15 @@ export default (props: {
     })
 
     const {
-        title = 'Title',
+        label = 'description',
         value = '',
-        placeholder = '',
-        maxlength = 12,
+        checked,
     } = properties
 
     return <WidgetHead path={path}>
-        <div className="content form-item">
-            <Typography.Title level={5}>{title}</Typography.Title>
-            <Input placeholder={placeholder} value={value} maxLength={maxlength} />
+        <div className="content inline" style={{ alignItems: 'center' }}>
+            <Radio style={{ marginRight: 6 }} checked={checked} value={value} />
+            <Typography.Text>{label}</Typography.Text>
         </div>
     </WidgetHead>
 }

@@ -12,11 +12,9 @@ import { TFormattedWidget } from '~/type'
 
 export default (props: {
     path: number[]
-    subName: string
-    title: string
     children?: any
 }) => {
-    const { path, children = null, title, subName } = props
+    const { path, children = null } = props
     const widget = useAppSelector(state => getWidgetByPath(path, state.widgets.list)) as TFormattedWidget
     const active = useAppSelector(state => state.widgets.activeId)
     const dispatch = useAppDispatch()
@@ -25,14 +23,14 @@ export default (props: {
         return <h1>Widget is null</h1>
     }
 
-    return <div className={`widget ${active === widget.__id__ ? 'active' : ''} ${subName}`}>
+    return <div className={`widget ${active === widget.__id__ ? 'active' : ''} ${widget.type}`}>
         <div className='head' onClick={e => {
             e.stopPropagation()
             dispatch(setWidgetActive(widget.__id__))
             dispatch(setActivePath(path))
         }}>
             {/* <span>{title} | {widget?.__id__}</span> */}
-            <span>{title}</span>
+            <span>{widget.text}</span>
             <label onClick={e => {
                 e.stopPropagation()
                 dispatch(removeWidgetByPath({ path }))

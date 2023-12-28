@@ -20,12 +20,13 @@ export default (props: {
         value = '',
         placeholder = '',
         maxlength = 12,
+        rows = 4,
     } = properties
 
     return <WidgetHead path={path}>
         <div className="content form-item">
             <Typography.Title level={5}>{title}</Typography.Title>
-            <Input placeholder={placeholder} value={value} maxLength={maxlength} />
+            <Input.TextArea style={{ marginBottom: 20 }} rows={rows} showCount placeholder={placeholder} value={value} maxLength={maxlength} />
         </div>
     </WidgetHead>
 }

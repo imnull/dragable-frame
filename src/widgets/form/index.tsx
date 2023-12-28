@@ -17,14 +17,14 @@ export default (props: { path: number[] }) => {
     const child = useAppSelector(state => getWidgetByPath([...path, 0], state.widgets.list))
 
     return <WidgetHead path={path}>
-        <div className='content' onDragOver={e => e.preventDefault()} onDrop={e => {
+        <form className='content' onDragOver={e => e.preventDefault()} onDrop={e => {
             e.stopPropagation()
             const text = e.dataTransfer.getData('text/plain')
             const data = JSON.parse(text)
             dispatch(addIndexedWidgetByPath({ path, data, index: 0 }))
         }}>
             {child ? <Widget type={child.type} path={[...path, 0]} /> : '拖入组件'}
-        </div>
+        </form>
     </WidgetHead>
 
 }

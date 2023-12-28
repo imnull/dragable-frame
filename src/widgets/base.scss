@@ -2,7 +2,6 @@
     display: flex;
     flex-direction: column;
     flex: 1;
-    min-height: 120px;
     border: 1px solid #aaa;
     position: relative;
     .head {
@@ -31,10 +30,22 @@
         color: #333;
         font-size: 14px;
         padding: 5px;
+        min-height: 30px;
         background-color: #f1f1f1;
         flex: 1;
         display: flex;
         flex-direction: row;
+        &.form-item {
+            flex-direction: column;
+            padding: 0 10px 10px 15px;
+        }
+        &.center {
+            align-items: center;
+        }
+        &.inline {
+            min-height: 0px;
+            flex-grow: 0;
+        }
         .col {
             border: 1px solid #ccc;
             flex: 1;
@@ -70,10 +81,4 @@
         }
     }
 
-    &.input {
-        > .content {
-            flex-direction: column;
-            padding: 0 10px 10px 15px;
-        }
-    }
 }

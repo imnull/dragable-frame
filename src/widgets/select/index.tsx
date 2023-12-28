@@ -1,9 +1,9 @@
-import { Input, Typography } from 'antd'
+import { Input, Typography, Select } from 'antd'
 import WidgetHead from '../widget-head'
 import { useAppSelector } from '~/store'
 import { getWidgetByPath } from '~/libs/messager'
 import { TWidget } from '~/type'
-
+import { formatPlainDataToOptions } from '~/utils'
 
 export default (props: {
     path?: number[]
@@ -17,15 +17,17 @@ export default (props: {
 
     const {
         title = 'Title',
+        options = '',
         value = '',
-        placeholder = '',
-        maxlength = 12,
     } = properties
 
     return <WidgetHead path={path}>
         <div className="content form-item">
             <Typography.Title level={5}>{title}</Typography.Title>
-            <Input placeholder={placeholder} value={value} maxLength={maxlength} />
+            <Select
+                defaultValue={value}
+                options={formatPlainDataToOptions(options || '')}
+            />
         </div>
     </WidgetHead>
 }

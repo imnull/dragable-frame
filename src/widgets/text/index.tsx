@@ -16,16 +16,21 @@ export default (props: {
     })
 
     const {
-        title = 'Title',
-        value = '',
-        placeholder = '',
-        maxlength = 12,
+        text = '文本内容',
+        type = '',
+        url = '',
+        ellipsis = false,
+        titleLevel = 5,
+        target = '_blank',
+        color,
     } = properties
 
     return <WidgetHead path={path}>
-        <div className="content form-item">
-            <Typography.Title level={5}>{title}</Typography.Title>
-            <Input placeholder={placeholder} value={value} maxLength={maxlength} />
+        <div className="content inline center">{
+            type === 'title' ? <Typography.Title style={{ color, margin: 0 }} ellipsis={ellipsis} level={titleLevel}>{text}</Typography.Title> :
+            type === 'link' ? <Typography.Link style={{ color }} href={url} target={target}>{text}</Typography.Link> :
+            <Typography.Text ellipsis={ellipsis} style={{ color }}>{text}</Typography.Text>
+        }
         </div>
     </WidgetHead>
 }
