@@ -1,4 +1,4 @@
-import { Typography, ColorPicker } from 'antd'
+import { InputNumber, Typography, Slider } from 'antd'
 import { getWidgetByPath } from '~/libs/messager'
 import { changeWidgetProp, useAppDispatch, useAppSelector } from '~/store'
 import { TWidget } from '~/type'
@@ -8,32 +8,36 @@ export default (props: {
     ['prop-set-name']: string
     path?: number[]
     text?: string
-    value?: any
+    min?: number
+    max?: number
 }) => {
-
     const {
         ['prop-set-name']: _propName,
         path = [],
-        text = '',
+        min = 0, max = 9, text = '',
     } = props
 
     const dispatch = useAppDispatch()
 
-    const value = useAppSelector(state => {
+    const widgetPropValue = useAppSelector(state => {
         const w = getWidgetByPath(path, state.widgets.list) as TWidget
         if (!w) {
-            return false
+            return 0
         }
-        return formatValue('string', (w.props || {})[_propName])
-    }) as string
+        return formatValue('number', (w.props || {})[_propName])
+    }) as number
 
-    return <div className="controller">
+
+
+    return <div className="controller row">
         <Typography.Title level={5}>{text}</Typography.Title>
-            <ColorPicker
-                value={value}
-                onChange={e => {
-                    dispatch(changeWidgetProp({ path, prop: _propName, value: `#${e.toHex()}` }))
+        <div className='component'>
+            <Slider
+                min={min} max={max} value={widgetPropValue}
+                onChange={val => {
+                    dispatch(changeWidgetProp({ path, prop: _propName, value: val }))
                 }}
             />
+        </div>
     </div>
 }

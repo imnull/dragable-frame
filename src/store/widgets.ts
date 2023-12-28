@@ -69,10 +69,18 @@ const widgets = createSlice({
                 widget.props = {}
             }
             widget.props[prop] = value
+        },
+        changeWidgetFormValue: (state, action: PayloadAction<{ path: number[], value: any }>) => {
+            const { path, value } = action.payload
+            const widget = getWidgetByPath(path, state.list) as TWidget
+            if(!widget || !widget.props) {
+                return
+            }
+            widget.props['value'] = value
         }
     }
 })
 
-export const { addWidgetToList, setWidgetActive, addIndexedWidgetByPath, flashWidgets, removeWidgetByPath, setActivePath, changeWidgetProp } = widgets.actions
+export const { addWidgetToList, setWidgetActive, addIndexedWidgetByPath, flashWidgets, removeWidgetByPath, setActivePath, changeWidgetProp, changeWidgetFormValue } = widgets.actions
 
 export default widgets.reducer

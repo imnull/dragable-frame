@@ -13,6 +13,7 @@ export const getComponentList = async () => {
                 titleLevel: 5,
                 target: '_blank',
                 color: '#000000',
+                fontSize: 14,
             }
         },
         {
@@ -45,7 +46,7 @@ export const getComponentList = async () => {
         },
         {
             type: 'input',
-            text: '单行文本输入',
+            text: '单行文本',
             props: {
                 title: '展示标题',
                 value: '',
@@ -56,7 +57,7 @@ export const getComponentList = async () => {
         },
         {
             type: 'textarea',
-            text: '多行文本输入',
+            text: '多行文本',
             props: {
                 title: '展示标题',
                 value: '',
@@ -125,14 +126,14 @@ export const getComponentControllers = async () => {
             type: 'coln',
             ctrls: [
                 { prop: 'formName', text: '表单名称', component: 'input-text', type: 'string', maxlength: 32 },
-                { prop: 'col', text: '列数', component: 'input-int', type: 'number', min: 1, max: 12 },
+                { prop: 'col', text: '列数', component: 'input-slider', type: 'number', min: 1, max: 12 },
             ]
         },
         {
             type: 'grid',
             ctrls: [
-                { prop: 'row', text: '行数', component: 'input-int', type: 'number', min: 1, max: 10 },
-                { prop: 'col', text: '列数', component: 'input-int', type: 'number', min: 1, max: 10 },
+                { prop: 'row', text: '行数', component: 'input-slider', type: 'number', min: 1, max: 10 },
+                { prop: 'col', text: '列数', component: 'input-slider', type: 'number', min: 1, max: 10 },
             ]
         },
         {
@@ -161,12 +162,12 @@ export const getComponentControllers = async () => {
                 { prop: 'title', text: '标题', component: 'input-text', type: 'string', maxlength: 32 },
                 { prop: 'placeholder', text: '水印', component: 'input-text', type: 'string', maxlength: 32 },
                 { prop: 'value', text: '预设', component: 'input-text', type: 'string', maxlength: 512 },
-                { prop: 'rows', text: '展示行数', component: 'input-int', type: 'number', min: 1, max: 20 },
+                { prop: 'rows', text: '行数', component: 'input-slider', type: 'number', min: 2, max: 20 },
                 { prop: 'maxlength', text: '字数限制', component: 'input-int', type: 'number', min: 1, max: 512 },
             ]
         },
         {
-            
+
             type: 'checkbox',
             ctrls: [
                 { prop: 'formName', text: '表单名称', component: 'input-text', type: 'string', maxlength: 32 },
@@ -176,7 +177,7 @@ export const getComponentControllers = async () => {
             ]
         },
         {
-            
+
             type: 'radio',
             ctrls: [
                 { prop: 'formName', text: '表单名称', component: 'input-text', type: 'string', maxlength: 32 },
@@ -186,15 +187,18 @@ export const getComponentControllers = async () => {
             ]
         },
         {
-            
+
             type: 'text',
             ctrls: [
-                { prop: 'type', text: '类型', component: 'input-select', type: 'string', options: [{ value: 'text', label: '文本' }, { value: 'title', label: '标题' }, { value: 'link', label: '链接' }] },
+                [
+                    { prop: 'type', text: '类型', component: 'input-select', type: 'string', options: [{ value: 'text', label: '文本' }, { value: 'title', label: '标题' }, { value: 'link', label: '链接' }] },
+                    { prop: 'color', text: '文本颜色', component: 'input-color', type: 'string' },
+                ],
+                { prop: 'fontSize', text: '字号', component: 'input-slider', type: 'number', min: 9, max: 72, if: "type!=title" },
+                { prop: 'titleLevel', text: '标题大小', component: 'input-select', type: 'number', if: "type==title", options: [{ value: 1, label: 'H1' }, { value: 2, label: 'H2' }, { value: 3, label: 'H3' }, { value: 4, label: 'H4' }, { value: 5, label: 'H5' }] },
                 { prop: 'text', text: '内容', component: 'input-textarea', type: 'string', maxlength: 0 },
-                { prop: 'ellipsis', text: '文本溢出', component: 'input-checkbox', type: 'boolean' },
-                { prop: 'color', text: '文本颜色', component: 'input-color', type: 'string' },
-                { prop: 'titleLevel', text: '标题大小', component: 'input-select', type: 'number', options: [{ value: 1, label: 'H1' }, { value: 2, label: 'H2' }, { value: 3, label: 'H3' }, { value: 4, label: 'H4' }, { value: 5, label: 'H5' }] },
-                { prop: 'url', text: '地址', component: 'input-text', type: 'string', maxlength: 0 },
+                { prop: 'ellipsis', text: '文本溢出', component: 'input-checkbox', type: 'boolean', if: "type!=link" },
+                { prop: 'url', text: '地址', component: 'input-text', type: 'string', maxlength: 0, if: "type==link" },
             ]
         },
         {

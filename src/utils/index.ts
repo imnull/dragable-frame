@@ -106,3 +106,33 @@ export const formatPlainDataToOptions = (data: string) => {
         return { label, value, disabled: disabled === '1' || disabled === 'true' }
     })
 }
+
+
+export const comparePath = (a: number[], b: number[]) => {
+    return a.length === b.length && a.every((v, i) => b[i] === v)
+}
+
+export const isForm = (widget: TWidget) => {
+    return !!widget.props && (!!widget.props.formName && typeof widget.props.formName === 'string') && ('value' in widget.props)
+}
+
+export const getFormValue = (widget: TWidget) => {
+    if (isForm(widget)) {
+        if (widget.type === 'checkbox' || widget.type === 'radio') {
+            if (widget.props.checked) {
+                return { [widget.props.formName]: widget.props.value || true }
+            } else {
+                return {}
+            }
+        } else {
+            return { [widget.props.formName]: widget.props.value || '' }
+        }
+    } else {
+        return {}
+    }
+}
+
+export const parseWidgetForm = (widgets: TWidget[]) => {
+    const items = widgets.filter(isForm).map(getFormValue)
+    return items.reduce((r, v) => ({ ...r, ...v }), {})
+}

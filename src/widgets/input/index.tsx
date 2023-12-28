@@ -1,6 +1,6 @@
 import { Input, Typography } from 'antd'
 import WidgetHead from '../widget-head'
-import { useAppSelector } from '~/store'
+import { changeWidgetFormValue, useAppDispatch, useAppSelector } from '~/store'
 import { getWidgetByPath } from '~/libs/messager'
 import { TWidget } from '~/type'
 
@@ -15,6 +15,8 @@ export default (props: {
         return widget && widget.props ? widget.props : {}
     })
 
+    const dispatch = useAppDispatch()
+
     const {
         title = 'Title',
         value = '',
@@ -25,7 +27,11 @@ export default (props: {
     return <WidgetHead path={path}>
         <div className="content form-item">
             <Typography.Title level={5}>{title}</Typography.Title>
-            <Input placeholder={placeholder} value={value} maxLength={maxlength} />
+            <Input type="text" placeholder={placeholder} value={value} maxLength={maxlength}
+                onChange={e => {
+                    dispatch(changeWidgetFormValue({ path, value: e.target.value }))
+                }}
+            />
         </div>
     </WidgetHead>
 }

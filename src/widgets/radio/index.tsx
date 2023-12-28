@@ -1,6 +1,6 @@
 import { Typography, Radio } from 'antd'
 import WidgetHead from '../widget-head'
-import { useAppSelector } from '~/store'
+import { changeWidgetProp, useAppDispatch, useAppSelector } from '~/store'
 import { getWidgetByPath } from '~/libs/messager'
 import { TWidget } from '~/type'
 
@@ -14,6 +14,7 @@ export default (props: {
         const widget = getWidgetByPath(path, state.widgets.list) as TWidget
         return widget && widget.props ? widget.props : {}
     })
+    const dispatch = useAppDispatch()
 
     const {
         label = 'description',
@@ -23,8 +24,12 @@ export default (props: {
 
     return <WidgetHead path={path}>
         <div className="content inline" style={{ alignItems: 'center' }}>
-            <Radio style={{ marginRight: 6 }} checked={checked} value={value} />
-            <Typography.Text>{label}</Typography.Text>
+            <div style={{ display: 'flex', flexDirection: 'row', userSelect: 'none', cursor: 'pointer' }} onClick={() => {
+                dispatch(changeWidgetProp({ path, prop: 'checked', value: !checked }))
+            }}>
+                <Radio style={{ marginRight: 6 }} checked={checked} value={value} />
+                <Typography.Text>{label}</Typography.Text>
+            </div>
         </div>
     </WidgetHead>
 }

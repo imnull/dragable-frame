@@ -1,4 +1,4 @@
-import { Typography, Checkbox } from 'antd'
+import { Typography, Checkbox, Switch } from 'antd'
 import { getWidgetByPath } from '~/libs/messager'
 import { changeWidgetProp, useAppDispatch, useAppSelector } from '~/store'
 import { TWidget } from '~/type'
@@ -36,7 +36,7 @@ export default (props: {
             }}
         >
             <Typography.Text style={{ marginRight: 6 }}>{text}</Typography.Text>
-            <Checkbox title={text} checked={checked}
+            <Switch checked={checked}
                 onChange={e => {
                     // dispatch(changeWidgetProp({ path, prop: _propName, value: e.target.checked }))
                 }}

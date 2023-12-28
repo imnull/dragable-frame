@@ -81,4 +81,21 @@
         }
     }
 
+    &.preview {
+        border: none;
+        .content {
+            min-height: 0px;
+            background-color: #fff;
+            .col {
+                border: none;
+                flex: 1;
+            }
+            .cell {
+                .empty {
+                    border: none;
+                }
+            }
+        }
+    }
+
 }

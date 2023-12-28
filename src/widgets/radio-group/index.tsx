@@ -1,6 +1,6 @@
 import { Typography, Radio } from 'antd'
 import WidgetHead from '../widget-head'
-import { useAppSelector } from '~/store'
+import { changeWidgetFormValue, useAppDispatch, useAppSelector } from '~/store'
 import { getWidgetByPath } from '~/libs/messager'
 import { TWidget } from '~/type'
 import { formatPlainDataToOptions } from '~/utils'
@@ -16,6 +16,9 @@ export default (props: {
         return widget && widget.props ? widget.props : {}
     })
 
+    const dispatch = useAppDispatch()
+
+
     const {
         title = 'Title',
         value = '',
@@ -28,6 +31,9 @@ export default (props: {
             <Radio.Group
                 value={value}
                 options={formatPlainDataToOptions(options || '')}
+                onChange={e => {
+                    dispatch(changeWidgetFormValue({ path, value: e.target.value || '' }))
+                }}
             />
         </div>
     </WidgetHead>

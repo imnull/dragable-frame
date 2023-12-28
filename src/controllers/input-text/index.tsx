@@ -1,5 +1,4 @@
 import { Input, Typography } from 'antd'
-import { useState } from 'react'
 import { getWidgetByPath } from '~/libs/messager'
 import { changeWidgetProp, useAppDispatch, useAppSelector } from '~/store'
 import { TWidget } from '~/type'
@@ -28,7 +27,7 @@ export default (props: {
         return formatValue('string', (w.props || {})[_propName])
     }) as string
 
-    return <div className="controller int-input">
+    return <div className="controller" style={{ flex: 1 }}>
         <Typography.Title level={5}>{text}</Typography.Title>
         <Input type="text" value={widgetPropValue}
             onChange={e => {

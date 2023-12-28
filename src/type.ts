@@ -20,9 +20,12 @@ export type TControlProps = {
     text: string
     type: 'string' | 'number' | 'boolean'
     component: string
+    if?: string
 } & Record<string, string | number>
+
+export type TControlPropsItem = TControlProps | TControlProps[]
 
 export type TController = {
     type: string
-    ctrls: TControlProps[]
+    ctrls: TControlPropsItem[]
 }

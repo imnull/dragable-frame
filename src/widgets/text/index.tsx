@@ -23,13 +23,14 @@ export default (props: {
         titleLevel = 5,
         target = '_blank',
         color,
+        fontSize = 14,
     } = properties
 
     return <WidgetHead path={path}>
         <div className="content inline center">{
             type === 'title' ? <Typography.Title style={{ color, margin: 0 }} ellipsis={ellipsis} level={titleLevel}>{text}</Typography.Title> :
-            type === 'link' ? <Typography.Link style={{ color }} href={url} target={target}>{text}</Typography.Link> :
-            <Typography.Text ellipsis={ellipsis} style={{ color }}>{text}</Typography.Text>
+            type === 'link' ? <Typography.Link style={{ color, fontSize }} href={url} target={target}>{text}</Typography.Link> :
+            <Typography.Text ellipsis={ellipsis} style={{ color, fontSize }}>{text}</Typography.Text>
         }
         </div>
     </WidgetHead>

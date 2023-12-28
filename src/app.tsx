@@ -11,17 +11,18 @@ import {
     setControllerList,
     setActivePath,
     setWidgetActive,
+    useAppSelector,
+    setScreenSwitch,
 } from './store'
+import { parseWidgetForm } from './utils'
 
 
 export default () => {
 
     const dispatch = useAppDispatch()
 
-    // const widgets = useAppSelector(state => state.widgets.list)
-    // useEffect(() => {
-    //     console.log('All widgets', widgets)
-    // }, [widgets])
+    const screenStatus = useAppSelector(state => state.screen.status)
+    const widgets = useAppSelector(state => state.widgets.list)
 
     useEffect(() => {
         getComponentList().then(list => {
@@ -40,6 +41,15 @@ export default () => {
             <ComponentList />
         </div>
         <div className="right">
+            <div className='screen-tools'>
+                <button onClick={() => {
+                    dispatch(setScreenSwitch())
+                }}>切换到{screenStatus === 'edit' ? `预览` : `编辑`}</button>
+                <button onClick={() => {
+                    const data = parseWidgetForm(widgets)
+                    console.log(2222222, data)
+                }}>导出表单数据</button>
+            </div>
             <PreviewMobild />
         </div>
         <div className="ctrls" onClick={e => e.stopPropagation()}>

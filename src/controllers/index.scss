@@ -1,0 +1,19 @@
+.controller {
+    flex: 1;
+    &.row {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-end;
+        .component {
+            flex: 1;
+            margin-left: 6px;
+        }
+    }
+}
+.ctrls-row {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+}
