@@ -1,14 +1,19 @@
 import { useAppSelector } from '~/store'
 import MAPPER from './mapper'
+import { TRect } from '~/type'
 
 export const Widget = (props: {
     path: number[],
     type: string,
+    dragging?: boolean,
 }) => {
-    const { path, type } = props
+    const { path, type, dragging = false } = props
     const { [type]: C } = MAPPER
     if (C) {
-        return <C path={[...path]} />
+        return <div className='widget-wrapper'>
+            <C path={[...path]} />
+            {dragging ? <div className='widget-frame'></div> : null}
+        </div>
     } else {
         return null
     }
@@ -21,8 +26,8 @@ const Render = () => {
             if (!widget) {
                 return null
             }
-            const { type } = widget
-            return <Widget type={type} path={[index]} key={widget.__id__} />
+            const { type, dragging = false, rect } = widget
+            return <Widget type={type} dragging={dragging} path={[index]} key={widget.__id__} />
         })
     }</>
 }

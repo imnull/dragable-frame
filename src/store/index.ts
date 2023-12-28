@@ -2,7 +2,10 @@ import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux'
 import { configureStore } from '@reduxjs/toolkit'
 
 import widgets from './widgets'
-export { addWidgetToList, setWidgetActive, addIndexedWidgetByPath, flashWidgets, removeWidgetByPath, setActivePath, changeWidgetProp, changeWidgetFormValue } from './widgets'
+export {
+    addWidgetToList, setWidgetActive, addIndexedWidgetByPath, flashWidgets, removeWidgetByPath,
+    setActivePath, changeWidgetProp, changeWidgetFormValue, setWidegetDragging,
+} from './widgets'
 
 import components from './components'
 export { addComponentToList, setComponentList } from './components'

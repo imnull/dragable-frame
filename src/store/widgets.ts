@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { getWidgetByPath, updateWidgetByPath } from '~/libs/messager'
-import { TWidget, TFormattedWidget } from '~/type'
+import { TWidget, TFormattedWidget, TRect } from '~/type'
 
 import { formatWidget } from '~/utils'
 
@@ -40,32 +40,32 @@ const widgets = createSlice({
         },
         removeWidgetByPath: (state, action: PayloadAction<{ path: number[] }>) => {
             const { path } = action.payload
-            if(path.length < 1) {
+            if (path.length < 1) {
                 return
-            } else if(path.length === 1) {
+            } else if (path.length === 1) {
                 state.list.splice(path[0], 1)
             } else {
                 const p = [...path]
                 const tail = p.pop()
-                if(typeof tail === 'number' && !isNaN(tail) && tail >= 0) {
+                if (typeof tail === 'number' && !isNaN(tail) && tail >= 0) {
                     const w = getWidgetByPath(p, state.list) as TFormattedWidget
-                    if(!w) {
+                    if (!w) {
                         return
                     }
-                    if(Array.isArray(w.children) && tail < w.children.length) {
+                    if (Array.isArray(w.children) && tail < w.children.length) {
                         w.children.splice(tail, 1, undefined as any)
                     }
                 }
-                
+
             }
         },
         changeWidgetProp: (state, action: PayloadAction<{ path: number[], prop: string, value: any }>) => {
             const { path, prop, value } = action.payload
             const widget = getWidgetByPath(path, state.list) as TWidget
-            if(!widget) {
+            if (!widget) {
                 return
             }
-            if(!widget.props) {
+            if (!widget.props) {
                 widget.props = {}
             }
             widget.props[prop] = value
@@ -73,14 +73,25 @@ const widgets = createSlice({
         changeWidgetFormValue: (state, action: PayloadAction<{ path: number[], value: any }>) => {
             const { path, value } = action.payload
             const widget = getWidgetByPath(path, state.list) as TWidget
-            if(!widget || !widget.props) {
+            if (!widget || !widget.props) {
                 return
             }
             widget.props['value'] = value
+        },
+        setWidegetDragging: (state, action: PayloadAction<{ path: number[]; dragging: boolean; rect?: TRect }>) => {
+            const { path, dragging, rect = null } = action.payload
+            const w = getWidgetByPath(path, state.list)
+            if (w) {
+                w.dragging = dragging
+                w.rect = rect
+            }
         }
     }
 })
 
-export const { addWidgetToList, setWidgetActive, addIndexedWidgetByPath, flashWidgets, removeWidgetByPath, setActivePath, changeWidgetProp, changeWidgetFormValue } = widgets.actions
+export const {
+    addWidgetToList, setWidgetActive, addIndexedWidgetByPath, flashWidgets, removeWidgetByPath,
+    setActivePath, changeWidgetProp, changeWidgetFormValue, setWidegetDragging
+} = widgets.actions
 
 export default widgets.reducer

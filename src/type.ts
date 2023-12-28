@@ -1,8 +1,11 @@
 export type TOnMessage = (type: string, path: number[], params?: any) => void
+export type TRect = { width: number; height: number; left: number; top: number; }
 
 export type TWidget = {
     type: string
     text: string
+    dragging?: boolean,
+    rect?: TRect | null
     data?: any
     props?: any
     children?: TWidget[]

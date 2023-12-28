@@ -6,6 +6,7 @@ import {
     setWidgetActive,
     setActivePath,
     removeWidgetByPath,
+    setWidegetDragging,
 } from '~/store'
 import { getWidgetByPath } from '~/libs/messager'
 import { TFormattedWidget } from '~/type'
@@ -34,7 +35,12 @@ export default (props: {
         return <div
             className={`widget ${active === widget.__id__ ? 'active' : ''} ${widget.type}`}
             draggable
-            onDragStart={e => e.dataTransfer.setData('text/plain', JSON.stringify(widget))}
+            onDragStart={e => {
+                e.dataTransfer.setData('text/plain', JSON.stringify(widget))
+                console.log(e.target)
+                const { width, height, left, top } = (e.target as HTMLElement).getBoundingClientRect()
+                dispatch(setWidegetDragging({ path, dragging: true }))
+            }}
         >
             <div
                 className='head'

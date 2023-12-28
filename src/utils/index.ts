@@ -63,7 +63,7 @@ export const genId = () => {
     return arr.join('').slice(0, len)
 }
 
-export const isFormattedWidget = (widget: any) => {
+export const isFormattedWidget = (widget: any): widget is TFormattedWidget => {
     return widget && widget.__isWidget__ === true
 }
 
@@ -142,4 +142,14 @@ export const getFormValue = (widget: TWidget) => {
 export const parseWidgetForm = (widgets: TWidget[]) => {
     const items = widgets.filter(isForm).map(getFormValue)
     return items.reduce((r, v) => ({ ...r, ...v }), {})
+}
+
+export const findWidgetDom = (target: HTMLElement | null): HTMLElement | null => {
+    if(!target || target.nodeName === 'BODY') {
+        return null
+    } else if (target.classList.contains('widget')) {
+        return target
+    } else {
+        return findWidgetDom(target.parentElement)
+    }
 }

@@ -32,26 +32,23 @@ export const traverseWidget = (widget: TFormattedWidget[] | TFormattedWidget, ca
     }
 }
 
-export const findWidgetPath = (widget: null | undefined | TFormattedWidget[] | TFormattedWidget, callback: (widget: TFormattedWidget) => boolean, path: number[] = []): number[] | null => {
+export const findWidgetPath = (widget: TFormattedWidget[] | TFormattedWidget, callback: (widget: TFormattedWidget, path: number[]) => boolean, path: number[] = []): number[] => {
     if (Array.isArray(widget)) {
-        let w: number[] | null = null
-        widget.some((widget, index) => {
-            w = findWidgetPath(widget, callback, [...path, index])
-            return !!w
-        })
-        return w
+        for (let i = 0; i < widget.length; i++) {
+            const p = [...path, i]
+            const _path = findWidgetPath(widget[i], callback, p)
+            if(_path.length > 0) {
+                return _path
+            }
+        }
     } else {
-        const p = [...path]
-        if (!widget) {
-            return null
-        } else if (callback(widget)) {
-            return p
+        if (callback(widget, path)) {
+            return path
         } else if (Array.isArray(widget.children)) {
-            return findWidgetPath(widget.children, callback, p)
-        } else {
-            return null
+            return findWidgetPath(widget.children, callback, path)
         }
     }
+    return []
 }
 
 export const updateWidgetByPath = (path: number[], widgets: TFormattedWidget[]) => {
@@ -84,7 +81,7 @@ export const updateWidgetProps = (path: number[], widgets: TFormattedWidget[], p
             break
         }
         if (p.length < 1) {
-            if(!w.props) {
+            if (!w.props) {
                 w.props = {}
             }
             Object.assign(w.props, props)
@@ -94,7 +91,7 @@ export const updateWidgetProps = (path: number[], widgets: TFormattedWidget[], p
             }
             break
         }
-        if(Array.isArray(w.children)) {
+        if (Array.isArray(w.children)) {
             ws = w.children
         } else {
             break
