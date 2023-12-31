@@ -11,6 +11,8 @@ import {
 } from '~/store'
 import { isFormattedWidget } from '~/utils'
 import { findWidgetPath } from '~/libs/messager'
+import { useState } from 'react'
+import { TRect } from '~/type'
 
 const findWidgetDom = (target: HTMLElement | null): HTMLElement | null => {
     if (!target || target.nodeName === 'BODY') {
@@ -27,6 +29,8 @@ export default () => {
     const widgets = useAppSelector(state => state.widgets.list)
     const dispatch = useAppDispatch()
 
+    const [screen, setScreen] = useState<HTMLDivElement | null>(null)
+
     return <div
         className="preview-mobile"
         onDragOver={e => {
@@ -37,6 +41,7 @@ export default () => {
             }
             const rect = widgetDom.getBoundingClientRect()
             const { clientX, clientY } = e
+            // console.log(e)
             // console.log({ clientX, clientY }, rect)
         }}
         onDrop={e => {
@@ -50,7 +55,15 @@ export default () => {
             }
         }}
     >
-        <div className="screen">
+        <div className="screen" ref={setScreen} onMouseDown={() => {
+            console.log(screen)
+            if(!screen) {
+                return
+            }
+            const els = Array.from(screen.childNodes).filter(n => n.nodeType === 1)
+            const rects = els.map(el => (el as HTMLElement).getBoundingClientRect()).map(({ width, height, left, top }) => ({ width, height, left, top })) as TRect[]
+            console.log(rects)
+        }}>
             <WidgetRender />
         </div>
     </div>

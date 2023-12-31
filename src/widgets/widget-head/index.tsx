@@ -37,7 +37,6 @@ export default (props: {
             draggable
             onDragStart={e => {
                 e.dataTransfer.setData('text/plain', JSON.stringify(widget))
-                console.log(e.target)
                 const { width, height, left, top } = (e.target as HTMLElement).getBoundingClientRect()
                 dispatch(setWidegetDragging({ path, dragging: true }))
             }}
